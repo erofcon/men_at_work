@@ -1,0 +1,11 @@
+venv/
+.idea/
+__pycache__/
+detection/model/*
+migrations/
+
+*.jpg
+*.png
+*.mp4
+
+db.sqlite3
