@@ -84,5 +84,5 @@ class RunDetection(CreateAPIView):
 
         serializer.validated_data['creator'] = self.request.user
         serializer.validated_data['in_processing'] = True
-        # table = serializer.save()
-        # run_detection.delay(table.id)
+        table = serializer.save()
+        run_detection.delay(table.id)

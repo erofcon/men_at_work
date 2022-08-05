@@ -33,6 +33,7 @@ class TaskTableSerializer(serializers.ModelSerializer):
     Task table serializer without images
     """
 
+
     category = CategorySerializer(many=False)
     executor = CustomUserSerializer(many=False)
     creator = CustomUserSerializer(many=False)
@@ -41,10 +42,8 @@ class TaskTableSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = 'id', 'description', 'category', 'description', 'createDateTime', 'creator', 'executor', 'state'
 
-    def convert_date(self, obj):
-        return obj.createDateTime.date()
+        fields = ['id', 'category', 'executor', 'creator', 'state', 'createDateTime', 'creator', 'executor']
 
     def is_expired(self, obj):
         if not obj.is_done:
@@ -54,6 +53,9 @@ class TaskTableSerializer(serializers.ModelSerializer):
                 return 'на выполнении'
         else:
             return 'выполнено'
+
+    def convert_date(self, obj):
+        return obj.createDateTime.date()
 
 
 class TaskTableDetailSerializer(serializers.ModelSerializer):
@@ -71,7 +73,7 @@ class TaskTableDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = '__all__'
+        exclude = ('address',)
 
     def is_expired(self, obj):
         if not obj.is_done:

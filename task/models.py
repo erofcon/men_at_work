@@ -70,7 +70,7 @@ class Images(models.Model):
                              related_name='images')
 
     def get_url(self):
-        return 'http://127.0.0.1:8000' + self.url.url
+        return 'http://192.168.1.34:8000' + self.url.url
 
     def __str__(self):
         return self.url.url

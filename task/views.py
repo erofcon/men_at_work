@@ -181,6 +181,7 @@ class CloseTask(UpdateAPIView):
     serializer_class = UpdateTaskSerializer
 
     def perform_update(self, serializer):
+        serializer.validated_data['is_done'] = True
         task = serializer.save()
 
         notification = TaskNotificationTable(task_id=task, related_user=task.executor, type='close task')

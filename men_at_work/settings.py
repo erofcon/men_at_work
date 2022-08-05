@@ -13,7 +13,7 @@ DEBUG = int(environ.get('DEBUG', default=1))
 try:
     ALLOWED_HOSTS = environ.get('ALLOWED_HOSTS').split(' ')
 except AttributeError:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
