@@ -44,4 +44,3 @@ class CreateAnswer(CreateAPIView):
 
         notification = TaskNotificationTable(task_id=answer.task, related_user=answer.task.creator, type='answer')
         notification.save()
-

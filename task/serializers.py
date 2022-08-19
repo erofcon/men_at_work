@@ -3,6 +3,7 @@ from user.serializers import CustomUserSerializer
 from .models import Task, Images, Category
 from answer.serializers import GetAnswerSerializer
 
+
 class CategorySerializer(serializers.ModelSerializer):
     """
     Category table serializer
@@ -33,26 +34,18 @@ class TaskTableSerializer(serializers.ModelSerializer):
     Task table serializer without images
     """
 
-
     category = CategorySerializer(many=False)
     executor = CustomUserSerializer(many=False)
     creator = CustomUserSerializer(many=False)
-    state = serializers.SerializerMethodField(method_name='is_expired')
     createDateTime = serializers.SerializerMethodField(method_name='convert_date')
-
+    is_expired = serializers.SerializerMethodField(method_name='get_expired')
     class Meta:
         model = Task
+        fields = ['id', 'category', 'executor', 'creator', 'createDateTime', 'is_done', 'is_expired']
 
-        fields = ['id', 'category', 'executor', 'creator', 'state', 'createDateTime', 'creator', 'executor']
+    def get_expired(self, obj):
+        return obj.expired
 
-    def is_expired(self, obj):
-        if not obj.is_done:
-            if obj.expired:
-                return 'просрочено'
-            else:
-                return 'на выполнении'
-        else:
-            return 'выполнено'
 
     def convert_date(self, obj):
         return obj.createDateTime.date()
@@ -68,21 +61,15 @@ class TaskTableDetailSerializer(serializers.ModelSerializer):
     creator = CustomUserSerializer(many=False)
     images = ImagesSerializer(many=True)
     answer = GetAnswerSerializer(many=True)
-    state = serializers.SerializerMethodField(method_name='is_expired')
     createDateTime = serializers.SerializerMethodField(method_name='convert_date')
+    is_expired = serializers.SerializerMethodField(method_name='get_expired')
 
     class Meta:
         model = Task
         exclude = ('address',)
 
-    def is_expired(self, obj):
-        if not obj.is_done:
-            if obj.expired:
-                return 'просрочено'
-            else:
-                return 'на выполнении'
-        else:
-            return 'выполнено'
+    def get_expired(self, obj):
+        return obj.expired
 
     def convert_date(self, obj):
         return obj.createDateTime.date()
@@ -92,7 +79,6 @@ class CreateTaskSerializer(serializers.ModelSerializer):
     """
     Create task serializer
     """
-
 
     class Meta:
         model = Task
@@ -107,8 +93,3 @@ class UpdateTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ['is_done']
-
-
-
-
-

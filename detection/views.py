@@ -29,8 +29,8 @@ class DetectedList(ListAPIView):
         elif self.request.user.is_creator:
             queryset = self.queryset.filter(creator=self.request.user)
 
-        if isinstance(queryset, QuerySet):
-            queryset = queryset.all()
+        # if isinstance(queryset, QuerySet):
+        #     queryset = queryset.all()
 
         return queryset
 
