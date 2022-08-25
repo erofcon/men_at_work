@@ -140,10 +140,13 @@ class CreateReport(APIView):
 
                 i += 1
 
-            with NamedTemporaryFile() as tmp:
-                workbook.save(tmp.name)
-                tmp.seek(0)
-                stream = tmp.read()
+            temp_file = NamedTemporaryFile(delete = True)
+            workbook.save(temp_file)
+            stream = temp_file.read()
+            # with NamedTemporaryFile() as tmp:
+            #     workbook.save(tmp.name)
+            #     tmp.seek(0)
+            #     stream = tmp.read()
 
             response = HttpResponse(content=stream, content_type='application/ms-excel', )
             response[

@@ -11,7 +11,7 @@ from .serializers import TaskTableSerializer, TaskTableDetailSerializer, CreateT
     UpdateTaskSerializer
 from .models import Task, Images, Category
 from notification.models import TaskNotificationTable
-
+import json
 
 class SetPagination(pagination.PageNumberPagination):
     """
@@ -124,9 +124,10 @@ class CreateTask(CreateAPIView):
                 url=image,
                 task=task
             )
-
+        print(serializer.validated_data['latitude'])
         notification = TaskNotificationTable(task_id=task, related_user=task.executor, type='new task')
         notification.save()
+
 
 
 class GetCountTask(APIView):

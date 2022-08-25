@@ -46,7 +46,6 @@ class TaskTableSerializer(serializers.ModelSerializer):
     def get_expired(self, obj):
         return obj.expired
 
-
     def convert_date(self, obj):
         return obj.createDateTime.date()
 

@@ -29,9 +29,6 @@ class DetectedList(ListAPIView):
         elif self.request.user.is_creator:
             queryset = self.queryset.filter(creator=self.request.user)
 
-        # if isinstance(queryset, QuerySet):
-        #     queryset = queryset.all()
-
         return queryset
 
 
@@ -81,7 +78,6 @@ class RunDetection(CreateAPIView):
     serializer_class = DetectedTableSerializer
 
     def perform_create(self, serializer):
-
         serializer.validated_data['creator'] = self.request.user
         serializer.validated_data['in_processing'] = True
         table = serializer.save()

@@ -17,19 +17,22 @@ class GetGeoJson(APIView):
         location = list()
 
         if request.user.is_superuser:
-            queryset = Task.objects.filter(latitude__isnull=False).filter(longitude__isnull=False).filter(is_done=False).all()
+            queryset = Task.objects.filter(latitude__isnull=False).filter(longitude__isnull=False).filter(
+                is_done=False).filter(expired=False).all()
 
         elif request.user.is_creator:
-            queryset = Task.objects.filter(creator=request.user).filter(latitude__isnull=False).filter(longitude__isnull=False).filter(is_done=False).all()
+            queryset = Task.objects.filter(creator=request.user).filter(latitude__isnull=False).filter(
+                longitude__isnull=False).filter(is_done=False).filter(expired=False).all()
 
         elif request.user.is_executor:
-            queryset = Task.objects.filter(executor=request.user).filter(latitude__isnull=False).filter(longitude__isnull=False).filter(is_done=False).all()
+            queryset = Task.objects.filter(executor=request.user).filter(latitude__isnull=False).filter(
+                longitude__isnull=False).filter(is_done=False).filter(expired=False).all()
 
         else:
             queryset = []
 
         for i in queryset:
-            location.append([i.longitude, i.latitude])
+            location.append([i.latitude, i.longitude])
 
         gjs = MultiPoint(location, precision=20)
 
@@ -46,7 +49,7 @@ class GetTaskToMap(APIView):
     def get(self, request):
         lat = request.query_params['lat']
         lng = request.query_params['lng']
-        queryset = Task.objects.filter(latitude=lat, longitude=lng).all()
+        queryset = Task.objects.filter(latitude=lat, longitude=lng).filter(is_done=False, expired=False).all()
 
         serializer = GetTaskToMapSerialize(queryset, many=True)
 

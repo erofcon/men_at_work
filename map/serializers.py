@@ -3,21 +3,6 @@ from task.models import Task, Images
 from task.serializers import CategorySerializer, ImagesSerializer
 from user.serializers import CustomUserSerializer
 
-#
-# class ImagesSerializer(serializers.ModelSerializer):
-#     """
-#     Сериалайзер таблицы Images
-#     """
-#
-#     url = serializers.SerializerMethodField(method_name='get_url')
-#
-#     class Meta:
-#         model = Images
-#         fields = ['id', 'url']
-#
-#     def get_url(self, instance):
-#         return instance.get_url()
-
 
 class GetTaskToMapSerialize(serializers.ModelSerializer):
     """
@@ -28,13 +13,13 @@ class GetTaskToMapSerialize(serializers.ModelSerializer):
     category = CategorySerializer(many=False)
     executor = CustomUserSerializer(many=False)
     creator = CustomUserSerializer(many=False)
-    state = serializers.SerializerMethodField(method_name='is_expired')
     createDateTime = serializers.SerializerMethodField(method_name='convert_date')
+    is_expired = serializers.SerializerMethodField(method_name='get_expired')
 
     class Meta:
         model = Task
 
-        fields = ['id', 'images', 'category', 'executor', 'creator', 'state', 'createDateTime']
+        fields = ['id', 'images', 'category', 'executor', 'creator', 'createDateTime', 'is_done', 'is_expired']
 
     def get_image(self, instance):
         queryset = instance.images.first()
@@ -42,17 +27,8 @@ class GetTaskToMapSerialize(serializers.ModelSerializer):
 
         return serializer.data
 
-    def is_expired(self, obj):
-        if not obj.is_done:
-            if obj.expired:
-                return 'просрочено'
-            else:
-                return 'на выполнении'
-        else:
-            return 'выполнено'
+    def get_expired(self, obj):
+        return obj.expired
 
     def convert_date(self, obj):
         return obj.createDateTime.date()
-
-
-
