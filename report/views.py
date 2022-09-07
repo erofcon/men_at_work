@@ -8,6 +8,7 @@ from rest_framework import permissions
 from openpyxl import Workbook
 from openpyxl.styles import Font
 from task.models import Task
+from openpyxl.writer.excel import save_virtual_workbook
 
 
 class GetCountTask(APIView):
@@ -140,17 +141,23 @@ class CreateReport(APIView):
 
                 i += 1
 
-            temp_file = NamedTemporaryFile(delete = True)
-            workbook.save(temp_file)
-            stream = temp_file.read()
-            # with NamedTemporaryFile() as tmp:
+            # temp_file = NamedTemporaryFile(delete = True)
+            # workbook.save(temp_file)
+            # stream = temp_file.read()
+            # with NamedTemporaryFile(delete = True) as tmp:
             #     workbook.save(tmp.name)
             #     tmp.seek(0)
             #     stream = tmp.read()
 
-            response = HttpResponse(content=stream, content_type='application/ms-excel', )
+            # with open('text.xls', 'wb') as tmp:
+            #     workbook.save(tmp.name)
+            #     # tmp.seek(0)
+            #     stream = tmp.read()
+            response = HttpResponse(save_virtual_workbook(workbook), content_type="application/ms-excel")
+
+            # response = HttpResponse(content=stream, content_type='application/ms-excel', )
             response[
-                'Content-Disposition'] = f'attachment; filename=ExportedExcel-{datetime.now().strftime("%Y%m%d%H%M")}.xlsx'
+                'Content-Disposition'] = f'attachment; filename={datetime.now().strftime("%Y%m%d%H%M")}.xlsx'
             return response
 
         return Response({'parameters not specified'})

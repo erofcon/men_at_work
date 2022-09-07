@@ -7,6 +7,7 @@ from men_at_work.permissions import UserCanCreate
 from notification.models import TaskNotificationTable, DetectionNotificationTable
 from notification.serializers import DetectionNotificationSerializer
 
+
 class DeleteTaskNotification(APIView):
     """
     Delete task notification

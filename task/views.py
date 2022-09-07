@@ -50,7 +50,7 @@ class GetTaskList(ListAPIView):
 
             elif param == 'new_current_tasks':
                 return self.queryset.filter(
-                    Q(expired=False) & Q(createDateTime__gte=datetime.today() - timedelta(days=2))
+                    Q(expired=False) & Q(createDateTime__gte=datetime.today() - timedelta(days=7))
                     & Q(is_done=False))
 
             elif param == 'expiring_current_tasks':
@@ -127,7 +127,6 @@ class CreateTask(CreateAPIView):
         print(serializer.validated_data['latitude'])
         notification = TaskNotificationTable(task_id=task, related_user=task.executor, type='new task')
         notification.save()
-
 
 
 class GetCountTask(APIView):

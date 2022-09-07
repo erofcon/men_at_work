@@ -39,9 +39,10 @@ class TaskTableSerializer(serializers.ModelSerializer):
     creator = CustomUserSerializer(many=False)
     createDateTime = serializers.SerializerMethodField(method_name='convert_date')
     is_expired = serializers.SerializerMethodField(method_name='get_expired')
+
     class Meta:
         model = Task
-        fields = ['id', 'category', 'executor', 'creator', 'createDateTime', 'is_done', 'is_expired']
+        fields = ['id', 'category', 'executor', 'creator', 'description', 'createDateTime', 'is_done', 'is_expired']
 
     def get_expired(self, obj):
         return obj.expired
